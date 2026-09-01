@@ -1,0 +1,131 @@
+@font-face {
+  font-family: "HKAAdmin";
+  src:
+    url("/fonts/Vazirmatn.woff2") format("woff2"),
+    url("/fonts/YekanBakh.woff2") format("woff2"),
+    url("/fonts/IRANSansX.woff2") format("woff2");
+  font-display: swap;
+}
+
+:root {
+  --hka-gold: #c49a2c;
+  --hka-gold-soft: #d4a82c;
+  --hka-navy: #0a1628;
+}
+
+/* RTL + Font only */
+html,
+body {
+  direction: rtl;
+}
+
+body,
+input,
+textarea,
+select,
+button {
+  font-family: "HKAAdmin", Vazirmatn, IRANSansX, Tahoma, Arial, sans-serif !important;
+}
+
+.payload,
+.template-default,
+.dashboard,
+.collection-list,
+.doc,
+.field-type,
+.render-fields,
+.drawer,
+.modal {
+  direction: rtl;
+  text-align: right;
+}
+
+input,
+textarea,
+select {
+  text-align: right;
+}
+
+input[type="email"],
+input[type="url"],
+input[name="slug"],
+input[name="email"],
+input[name="phone"],
+input[name="link"],
+input[name="canonicalUrl"],
+pre,
+code {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Tables */
+th,
+td {
+  text-align: right !important;
+}
+
+/* Keep Payload default colors, only improve labels */
+label,
+.field-label {
+  font-weight: 700 !important;
+}
+
+.field-description,
+.description,
+.field-type .description {
+  line-height: 1.85 !important;
+}
+
+/* Safe brand accent */
+.btn--style-primary,
+button[type="submit"] {
+  background: var(--hka-gold) !important;
+  border-color: var(--hka-gold) !important;
+  color: var(--hka-navy) !important;
+  font-weight: 800 !important;
+}
+
+.btn--style-primary:hover,
+button[type="submit"]:hover {
+  background: var(--hka-gold-soft) !important;
+  border-color: var(--hka-gold-soft) !important;
+  color: var(--hka-navy) !important;
+}
+
+/* Active links / selected tabs only */
+.nav a[aria-current="page"],
+.nav .nav__link--active,
+.tabs-field__tab-button--active,
+button[aria-selected="true"] {
+  color: var(--hka-gold) !important;
+  border-color: var(--hka-gold) !important;
+}
+
+/* Do not force dark text inside dark UI areas */
+.nav,
+.nav *,
+.app-header,
+.app-header *,
+.template-default__nav,
+.template-default__nav *,
+.doc-drawer,
+.doc-drawer *,
+.drawer,
+.drawer * {
+  text-shadow: none;
+}
+
+/* Helpful for Persian content */
+textarea {
+  line-height: 1.9 !important;
+}
+
+/* Mobile comfort */
+@media (max-width: 768px) {
+  .doc,
+  .collection-list {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+}
