@@ -2,10 +2,8 @@ import path from "path";
 import dotenv from "dotenv";
 
 dotenv.config({ path: path.resolve(process.cwd(), ".env.production") });
+dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
 dotenv.config({ path: path.resolve(process.cwd(), ".env") });
-
-import { getPayload } from "payload";
-import config from "./payload.config";
 
 /* ── Industrial Products Seed Data ── */
 const PRODUCTS_DATA = [
@@ -149,6 +147,10 @@ const PRODUCTS_DATA = [
 /* ── Seed Runner ── */
 async function seed() {
   console.log("Starting Payload CMS Products Seeding...");
+  const { getPayload } = await import("payload");
+  const configModule = await import("./payload.config");
+  const config = configModule.default;
+
   const payload = await getPayload({ config });
 
   for (const prod of PRODUCTS_DATA) {
