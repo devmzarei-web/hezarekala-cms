@@ -394,6 +394,66 @@ export const Pages: CollectionConfig = {
             },
           ],
         },
+        {
+          label: 'توانمندی‌ها و ماشین‌آلات (Capabilities)',
+          description: 'تنظیمات و اطلاعات تکمیلی صفحه توانمندی‌ها و ماشین‌شاپ کارخانه',
+          admin: {
+            condition: (data: Record<string, unknown>) =>
+              data?.slug === 'capabilities',
+          },
+          fields: [
+            {
+              name: 'capabilitiesIntro',
+              type: 'group',
+              label: 'بخش معرفی توانمندی‌های مهندسی',
+              fields: [
+                {
+                  name: 'badge',
+                  type: 'text',
+                  label: 'برچسب بالای تیتر',
+                  defaultValue: 'رویکرد مهندسی یکپارچه',
+                },
+                {
+                  name: 'title',
+                  type: 'text',
+                  label: 'تیتر اصلی',
+                  defaultValue: 'چرخه کامل طراحی تا تحویل در کارخانه آبادان',
+                },
+              ],
+            },
+            {
+              name: 'plantHighlight',
+              type: 'group',
+              label: 'مشخصات کلیدی کارخانه',
+              fields: [
+                {
+                  name: 'hydrostaticStandard',
+                  type: 'text',
+                  label: 'استاندارد تست هیدرواستاتیک',
+                  defaultValue: 'API 610 / ISO 5199',
+                },
+                {
+                  name: 'rollingCapacity',
+                  type: 'text',
+                  label: 'ظرفیت نورد ورق',
+                  defaultValue: 'تا ضخامت ۶۰ میلی‌متر (۳ متری)',
+                },
+                {
+                  name: 'maxCraneCapacity',
+                  type: 'text',
+                  label: 'حداکثر ظرفیت جرثقیل',
+                  defaultValue: '۲۰ تن',
+                },
+                {
+                  name: 'powerGenerator',
+                  type: 'text',
+                  label: 'توان دیزل ژنراتور مستقل',
+                  defaultValue: '۴۰۰ کاوا',
+                },
+              ],
+            },
+          ],
+        },
       ],
     },
   ],
