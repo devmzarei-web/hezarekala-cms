@@ -1,5 +1,4 @@
 import type { Payload } from "payload";
-import mongoose from "mongoose";
 
 export const DEFAULT_CATEGORIES = [
   { title: "دیزل ژنراتور و موتور دیزلی", slug: "generators", order: 1 },
@@ -14,77 +13,88 @@ export const DEFAULT_CATEGORIES = [
 ];
 
 export async function migrateProductCategories(payload?: Payload) {
+  if (!payload) return;
   try {
-    const db = mongoose.connection.db;
-    if (!db) {
-      console.log("[Category Migration] دیتابیس در دسترس نیست، مهاجرت رد شد.");
-      return;
-    }
+    console.log("[Category Migration] در حال همگام‌سازی دسته‌بندی‌ها...");
 
-    const categoriesColl = db.collection("product-categories");
-    const productsColl = db.collection("products");
+    const categoryMap = new Map<string, string>();
 
-    // ۱. اطمینان از وجود دسته‌بندی‌های پیش‌فرض در product-categories
+    // ۱. اطمینان از وجود کلیه دسته‌بندی‌های استاندارد در product-categories
     for (const cat of DEFAULT_CATEGORIES) {
-      const existing = await categoriesColl.findOne({ slug: cat.slug });
-      if (!existing) {
-        await categoriesColl.insertOne({
-          title: cat.title,
-          slug: cat.slug,
-          order: cat.order,
-          isActive: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+      try {
+        const existing = await payload.find({
+          collection: "product-categories",
+          where: { slug: { equals: cat.slug } },
+          limit: 1,
+          depth: 0,
         });
-        console.log(`[Category Migration] دسته‌بندی ایجاد شد: ${cat.title} (${cat.slug})`);
-      }
-    }
 
-    // ۲. نقشه‌برداری اسلاگ دسته‌ها به ObjectId
-    const allCategories = await categoriesColl.find({}).toArray();
-    const categoryBySlug = new Map<string, any>();
-    for (const cat of allCategories) {
-      if (cat.slug) categoryBySlug.set(cat.slug, cat._id);
-    }
-
-    // ۳. بررسی و تبدیل فیلد category در محصولات به ObjectId معتبر
-    const products = await productsColl.find({}).toArray();
-    for (const prod of products) {
-      if (!prod.category) continue;
-
-      if (typeof prod.category === "string") {
-        const isValidObjectId =
-          mongoose.Types.ObjectId.isValid(prod.category) && prod.category.length === 24;
-
-        if (!isValidObjectId) {
-          // اگر اسلاگ متنی مثل 'other' یا 'gear' یا 'centrifugal' باشد
-          let catId = categoryBySlug.get(prod.category);
-
-          if (!catId) {
-            // در صورتی که دسته جدیدی با این اسلاگ وجود نداشته باشد ایجاد می‌کنیم
-            const newCat = await categoriesColl.insertOne({
-              title: prod.category,
-              slug: prod.category,
-              order: 99,
+        if (existing.docs.length > 0) {
+          categoryMap.set(cat.slug, existing.docs[0].id);
+        } else {
+          const created = await payload.create({
+            collection: "product-categories",
+            data: {
+              title: cat.title,
+              slug: cat.slug,
+              order: cat.order,
               isActive: true,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            });
-            catId = newCat.insertedId;
-            categoryBySlug.set(prod.category, catId);
-          }
-
-          await productsColl.updateOne(
-            { _id: prod._id },
-            { $set: { category: catId } }
-          );
-          console.log(
-            `[Category Migration] دسته‌بندی محصول «${prod.title}» از رشته «${prod.category}» به ObjectId(${catId}) تبدیل شد.`
-          );
+            },
+          });
+          categoryMap.set(cat.slug, created.id);
+          console.log(`[Category Migration] دسته‌بندی ایجاد شد: ${cat.title} (${cat.slug})`);
         }
+      } catch (err) {
+        // ignore
       }
     }
-    console.log("[Category Migration] فرآیند همگام‌سازی و ارتقای دسته‌بندی‌ها با موفقیت انجام شد.");
+
+    // ۲. بررسی محصولات و تبدیل اسلاگ‌های رشته‌ای به ObjectId معتبر در دیتابیس
+    const allProducts = await payload.find({
+      collection: "products",
+      limit: 100,
+      depth: 0,
+    });
+
+    for (const prod of allProducts.docs) {
+      const catVal = prod.category;
+      if (typeof catVal === "string" && !/^[0-9a-fA-F]{24}$/.test(catVal)) {
+        let targetId = categoryMap.get(catVal);
+        if (!targetId) {
+          const cat = await payload.find({
+            collection: "product-categories",
+            where: { slug: { equals: catVal } },
+            limit: 1,
+            depth: 0,
+          });
+          if (cat.docs.length > 0) {
+            targetId = cat.docs[0].id;
+          } else {
+            const newCat = await payload.create({
+              collection: "product-categories",
+              data: {
+                title: catVal,
+                slug: catVal,
+                order: 99,
+                isActive: true,
+              },
+            });
+            targetId = newCat.id;
+          }
+          categoryMap.set(catVal, targetId);
+        }
+
+        console.log(`[Category Migration] بروزرسانی محصول «${prod.title}» به شناسه دسته: ${targetId}`);
+        await payload.update({
+          collection: "products",
+          id: prod.id,
+          data: {
+            category: targetId,
+          } as any,
+        });
+      }
+    }
+    console.log("[Category Migration] همگام‌سازی دسته‌بندی‌ها با موفقیت انجام شد.");
   } catch (err) {
     console.error("[Category Migration Error]:", err);
   }

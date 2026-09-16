@@ -1,5 +1,95 @@
 import type { CollectionConfig } from "payload";
 
+const DEFAULT_TITLES: Record<string, string> = {
+  centrifugal: "پمپ سانتریفیوژ و خودمکش",
+  gear: "پمپ دنده‌ای و غلیظ‌کش",
+  other: "وت‌بلاست و آماده‌سازی سطح",
+  generators: "دیزل ژنراتور و موتور دیزلی",
+  "sludge-pumps": "پمپ لجن‌کش و خودمکش",
+  "gear-pumps": "پمپ دنده‌ای پرتابل",
+  piston: "پمپ پیستونی",
+  multistage: "پمپ طبقاتی",
+  machining: "خدمات ماشین‌کاری سنگین",
+};
+
+const resolveCategorySlug = async ({ doc, req }: any) => {
+  if (!doc) return doc;
+
+  let rawVal = doc.category;
+  if (typeof rawVal === "object" && rawVal !== null) {
+    rawVal = rawVal.id || rawVal.slug;
+  }
+
+  if (typeof rawVal === "string" && rawVal.length > 0 && !/^[0-9a-fA-F]{24}$/.test(rawVal)) {
+    try {
+      const cat = await req.payload.find({
+        collection: "product-categories",
+        where: { slug: { equals: rawVal } },
+        limit: 1,
+        depth: 0,
+      });
+
+      if (cat.docs.length > 0) {
+        doc.category = cat.docs[0];
+      } else {
+        const title = DEFAULT_TITLES[rawVal] || rawVal;
+        const newCat = await req.payload.create({
+          collection: "product-categories",
+          data: {
+            title,
+            slug: rawVal,
+            isActive: true,
+            order: 0,
+          },
+        });
+        doc.category = newCat;
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
+  return doc;
+};
+
+const resolveCategoryBeforeChange = async ({ data, req }: any) => {
+  if (!data) return data;
+
+  let rawVal = data.category;
+  if (typeof rawVal === "object" && rawVal !== null) {
+    rawVal = rawVal.id || rawVal.slug;
+  }
+
+  if (typeof rawVal === "string" && rawVal.length > 0 && !/^[0-9a-fA-F]{24}$/.test(rawVal)) {
+    try {
+      const cat = await req.payload.find({
+        collection: "product-categories",
+        where: { slug: { equals: rawVal } },
+        limit: 1,
+        depth: 0,
+      });
+
+      if (cat.docs.length > 0) {
+        data.category = cat.docs[0].id;
+      } else {
+        const title = DEFAULT_TITLES[rawVal] || rawVal;
+        const newCat = await req.payload.create({
+          collection: "product-categories",
+          data: {
+            title,
+            slug: rawVal,
+            isActive: true,
+            order: 0,
+          },
+        });
+        data.category = newCat.id;
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
+  return data;
+};
+
 export const Products: CollectionConfig = {
   slug: "products",
   labels: {
@@ -14,6 +104,10 @@ export const Products: CollectionConfig = {
     defaultColumns: ["title", "slug", "category", "isActive", "isFeatured", "order"],
     group: "محصولات و پروژه‌ها",
     description: "مدیریت کاتالوگ محصولات صنعتی، دیزل ژنراتورها، پمپ‌ها و تجهیزات",
+  },
+  hooks: {
+    afterRead: [resolveCategorySlug],
+    beforeChange: [resolveCategoryBeforeChange],
   },
   fields: [
     /* ── بخش اطلاعات اصلی ── */
