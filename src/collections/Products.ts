@@ -29,15 +29,13 @@ export const Products: CollectionConfig = {
     },
     {
       name: "category",
-      type: "select",
+      type: "relationship",
+      relationTo: "product-categories",
+      hasMany: false,
       label: "دسته‌بندی",
-      options: [
-        { label: "پمپ سانتریفیوژ", value: "centrifugal" },
-        { label: "پمپ پیستونی", value: "piston" },
-        { label: "پمپ دنده‌ای", value: "gear" },
-        { label: "پمپ طبقاتی", value: "multistage" },
-        { label: "سایر", value: "other" },
-      ],
+      admin: {
+        description: "دسته‌بندی اصلی محصول را انتخاب کنید.",
+      },
     },
 
     /* ── بخش تصاویر ── */
@@ -94,11 +92,17 @@ export const Products: CollectionConfig = {
           options: [
             { label: "دبی نامی / کاری (Flow Rate)", value: "flowRate" },
             { label: "هد ماکزیمم (Head)", value: "head" },
-            { label: "توان الکتروموتور (Power)", value: "power" },
+            { label: "توان الکتروموتور / محرک (Power)", value: "power" },
+            { label: "توان نامی دیزل ژنراتور (Nominal Rating / KVA)", value: "kva" },
+            { label: "مدل موتور دیزل (Diesel Engine Model)", value: "engineModel" },
+            { label: "سیستم خنک‌کننده (Cooling System)", value: "coolingType" },
+            { label: "عمق مکش مجاز (Max Suction Depth)", value: "suctionDepth" },
+            { label: "حداکثر قطر عبور ذرات جامد (Max Solids Passage)", value: "solidsHandling" },
+            { label: "ابعاد میز کارگیر (Table / Working Size)", value: "tableSize" },
             { label: "دور موتور (Speed / RPM)", value: "speed" },
             { label: "استاندارد ساخت (Standard)", value: "standard" },
             { label: "متریال پروانه (Impeller Material)", value: "impellerMaterial" },
-            { label: "متریال پوسته (Casing Material)", value: "casingMaterial" },
+            { label: "متریال پوسته / شاسی (Casing/Frame Material)", value: "casingMaterial" },
             { label: "متریال شفت (Shaft Material)", value: "shaftMaterial" },
             { label: "نوع آب‌بندی (Sealing Type)", value: "sealType" },
             { label: "حداکثر دمای کاری (Max Temp)", value: "maxTemp" },
@@ -144,6 +148,32 @@ export const Products: CollectionConfig = {
           type: "checkbox",
           label: "محاسبه تفاضل عددی در مقایسه محصولات",
           defaultValue: true,
+        },
+      ],
+    },
+
+    /* ── بخش اسناد و کاتالوگ‌های پیوست ── */
+    {
+      name: "documents",
+      type: "array",
+      label: "کاتالوگ‌ها و اسناد فنی پیوست (PDF)",
+      labels: {
+        singular: "سند فنی",
+        plural: "اسناد فنی",
+      },
+      fields: [
+        {
+          name: "title",
+          type: "text",
+          required: true,
+          label: "عنوان سند (مثلاً: کاتالوگ دیزل ژنراتور ۴۵ کاوا)",
+        },
+        {
+          name: "file",
+          type: "upload",
+          relationTo: "media",
+          required: true,
+          label: "فایل کاتالوگ / بروشور (PDF)",
         },
       ],
     },

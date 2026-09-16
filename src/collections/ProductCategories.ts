@@ -18,6 +18,7 @@ export const ProductCategories: CollectionConfig = {
     singular: "دسته‌بندی محصول",
     plural: "دسته‌بندی محصولات",
   },
+  defaultSort: "order",
   admin: {
     group: "محصولات و پروژه‌ها",
     useAsTitle: "title",

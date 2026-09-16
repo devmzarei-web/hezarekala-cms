@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     media: Media;
     products: Product;
+    'product-categories': ProductCategory;
     pages: Page;
     settings: Setting;
     messages: Message;
@@ -88,6 +89,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
+    'product-categories': ProductCategoriesSelect<false> | ProductCategoriesSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     settings: SettingsSelect<false> | SettingsSelect<true>;
     messages: MessagesSelect<false> | MessagesSelect<true>;
@@ -216,7 +218,10 @@ export interface Product {
    * مثلاً: centrifugal-pump-500
    */
   slug: string;
-  category?: ('centrifugal' | 'piston' | 'gear' | 'multistage' | 'other') | null;
+  /**
+   * دسته‌بندی اصلی محصول را انتخاب کنید.
+   */
+  category?: (string | null) | ProductCategory;
   featuredImage?: (string | null) | Media;
   gallery?:
     | {
@@ -245,8 +250,42 @@ export interface Product {
   } | null;
   specifications?:
     | {
-        label: string;
+        standardFeature?:
+          | (
+              | 'flowRate'
+              | 'head'
+              | 'power'
+              | 'kva'
+              | 'engineModel'
+              | 'coolingType'
+              | 'suctionDepth'
+              | 'solidsHandling'
+              | 'tableSize'
+              | 'speed'
+              | 'standard'
+              | 'impellerMaterial'
+              | 'casingMaterial'
+              | 'shaftMaterial'
+              | 'sealType'
+              | 'maxTemp'
+              | 'maxPressure'
+              | 'flangeRating'
+              | 'weight'
+              | 'custom'
+            )
+          | null;
+        customLabel?: string | null;
+        label?: string | null;
         value: string;
+        unit?: string | null;
+        isNumeric?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  documents?:
+    | {
+        title: string;
+        file: string | Media;
         id?: string | null;
       }[]
     | null;
@@ -273,6 +312,32 @@ export interface Product {
   createdAt: string;
 }
 /**
+ * دسته‌بندی‌های محصولات از این بخش مدیریت می‌شوند.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-categories".
+ */
+export interface ProductCategory {
+  id: string;
+  title: string;
+  /**
+   * فقط انگلیسی و بدون فاصله. مثال: centrifugal
+   */
+  slug: string;
+  /**
+   * اختیاری. برای توضیح داخلی یا استفاده‌های بعدی در سایت.
+   */
+  description?: string | null;
+  /**
+   * اختیاری. برای توسعه‌های بعدی سایت.
+   */
+  image?: (string | null) | Media;
+  isActive?: boolean | null;
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages".
  */
@@ -280,7 +345,7 @@ export interface Page {
   id: string;
   title: string;
   /**
-   * برای صفحه اصلی home بنویسید
+   * اسلاگ صفحه (مانند home, compare, about, products, projects, gallery, capabilities, contact, blog)
    */
   slug: string;
   subtitle?: string | null;
@@ -328,6 +393,88 @@ export interface Page {
    * در metabox جستجو و کارت‌های اشتراک‌گذاری نمایش داده می‌شود.
    */
   excerpt?: string | null;
+  introSection?: {
+    badge?: string | null;
+    title?: string | null;
+    story?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    highlights?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  credentials?: {
+    boxTitle?: string | null;
+    companyType?: string | null;
+    registeredName?: string | null;
+    registrationNumber?: string | null;
+    nationalId?: string | null;
+    economicCode?: string | null;
+    ceo?: string | null;
+    location?: string | null;
+    ctaText?: string | null;
+    ctaLink?: string | null;
+  };
+  stats?:
+    | {
+        number: string;
+        label: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  strategicGoals?:
+    | {
+        title: string;
+        description: string;
+        icon?: ('vision' | 'mission' | 'values' | 'quality') | null;
+        id?: string | null;
+      }[]
+    | null;
+  workstations?:
+    | {
+        title: string;
+        description: string;
+        equipment?: string | null;
+        capacity?: string | null;
+        image?: (string | null) | Media;
+        icon?: ('machining' | 'testing' | 'balancing' | 'qc' | 'assembly' | 'engineering' | 'facility') | null;
+        id?: string | null;
+      }[]
+    | null;
+  companyGrounds?:
+    | {
+        title?: string | null;
+        image: string | Media;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  capabilitiesIntro?: {
+    badge?: string | null;
+    title?: string | null;
+  };
+  plantHighlight?: {
+    hydrostaticStandard?: string | null;
+    rollingCapacity?: string | null;
+    maxCraneCapacity?: string | null;
+    powerGenerator?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -549,6 +696,10 @@ export interface PayloadLockedDocument {
         value: string | Product;
       } | null)
     | ({
+        relationTo: 'product-categories';
+        value: string | ProductCategory;
+      } | null)
+    | ({
         relationTo: 'pages';
         value: string | Page;
       } | null)
@@ -716,8 +867,19 @@ export interface ProductsSelect<T extends boolean = true> {
   specifications?:
     | T
     | {
+        standardFeature?: T;
+        customLabel?: T;
         label?: T;
         value?: T;
+        unit?: T;
+        isNumeric?: T;
+        id?: T;
+      };
+  documents?:
+    | T
+    | {
+        title?: T;
+        file?: T;
         id?: T;
       };
   metaTitle?: T;
@@ -725,6 +887,20 @@ export interface ProductsSelect<T extends boolean = true> {
   keywords?: T;
   canonicalUrl?: T;
   isFeatured?: T;
+  isActive?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-categories_select".
+ */
+export interface ProductCategoriesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  description?: T;
+  image?: T;
   isActive?: T;
   order?: T;
   updatedAt?: T;
@@ -753,6 +929,82 @@ export interface PagesSelect<T extends boolean = true> {
   metaTitle?: T;
   metaDescription?: T;
   excerpt?: T;
+  introSection?:
+    | T
+    | {
+        badge?: T;
+        title?: T;
+        story?: T;
+        highlights?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+      };
+  credentials?:
+    | T
+    | {
+        boxTitle?: T;
+        companyType?: T;
+        registeredName?: T;
+        registrationNumber?: T;
+        nationalId?: T;
+        economicCode?: T;
+        ceo?: T;
+        location?: T;
+        ctaText?: T;
+        ctaLink?: T;
+      };
+  stats?:
+    | T
+    | {
+        number?: T;
+        label?: T;
+        description?: T;
+        id?: T;
+      };
+  strategicGoals?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        icon?: T;
+        id?: T;
+      };
+  workstations?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        equipment?: T;
+        capacity?: T;
+        image?: T;
+        icon?: T;
+        id?: T;
+      };
+  companyGrounds?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+        id?: T;
+      };
+  capabilitiesIntro?:
+    | T
+    | {
+        badge?: T;
+        title?: T;
+      };
+  plantHighlight?:
+    | T
+    | {
+        hydrostaticStandard?: T;
+        rollingCapacity?: T;
+        maxCraneCapacity?: T;
+        powerGenerator?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

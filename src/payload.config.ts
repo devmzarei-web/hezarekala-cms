@@ -9,6 +9,7 @@ import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Products } from './collections/Products'
+import { ProductCategories } from './collections/ProductCategories'
 import { Pages } from './collections/Pages'
 import { Settings } from './collections/Settings'
 import { Messages } from './collections/Messages'
@@ -60,6 +61,7 @@ export default buildConfig({
     Users,
     Media,
     Products,
+    ProductCategories,
     Pages,
     Settings,
     Messages,
