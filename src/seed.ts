@@ -10,12 +10,12 @@ function buildLexicalContent(paragraphs: string[]) {
   return {
     root: {
       type: "root",
-      format: "",
+      format: "" as const,
       indent: 0,
       version: 1,
       children: paragraphs.map((text) => ({
         type: "paragraph",
-        format: "",
+        format: "" as const,
         indent: 0,
         version: 1,
         children: [
@@ -36,80 +36,13 @@ function buildLexicalContent(paragraphs: string[]) {
   };
 }
 
-/* ── Product Categories Seed Data ── */
-const CATEGORIES_DATA = [
-  {
-    title: "دیزل ژنراتور و موتور دیزلی",
-    slug: "generators",
-    description: "انواع دیزل ژنراتورهای صنعتی، کانوپی‌دار سایلنت و موتورهای دیزل سنگین",
-    order: 1,
-    isActive: true,
-  },
-  {
-    title: "پمپ دنده‌ای و غلیظ‌کش",
-    slug: "gear",
-    description: "پمپ‌های دنده‌ای جابه‌جایی مثبت صنعتی جهت انتقال سیالات سنگین، سوخت، قیر و روغن‌های صنعتی",
-    order: 2,
-    isActive: true,
-  },
-  {
-    title: "پمپ سانتریفیوژ و خودمکش",
-    slug: "centrifugal",
-    description: "پمپ‌های سانتریفیوژ حلزونی، خودمکش تمام‌اتوماتیک و پمپاژ لجن و پساب صنعتی",
-    order: 3,
-    isActive: true,
-  },
-  {
-    title: "پمپ لجن‌کش و خودمکش",
-    slug: "sludge-pumps",
-    description: "پمپ‌های خودمکش پروانه‌باز تخصصی انتقال لجن‌های سنگین، شن و ماسه و سیالات حاوی مواد جامد",
-    order: 4,
-    isActive: true,
-  },
-  {
-    title: "پمپ دنده‌ای پرتابل",
-    slug: "gear-pumps",
-    description: "پکیج‌های پمپ پرتابل شاسی‌دار مجهز به موتور دیزل و کاور سایلنت جاذب صوت",
-    order: 5,
-    isActive: true,
-  },
-  {
-    title: "وت‌بلاست و آماده‌سازی سطح",
-    slug: "other",
-    description: "سامانه‌های سندبلاست مرطوب، زنگ‌زدایی و آماده‌سازی سطوح صنعتی بدون غبار",
-    order: 6,
-    isActive: true,
-  },
-  {
-    title: "پمپ پیستونی",
-    slug: "piston",
-    description: "پمپ‌های فشار قوی پیستونی رفت و برگشتی جهت تزریق مواد شیمیایی و شستشوی صنعتی",
-    order: 7,
-    isActive: true,
-  },
-  {
-    title: "پمپ طبقاتی",
-    slug: "multistage",
-    description: "پمپ‌های طبقاتی سانتریفیوژ فشار قوی برای تأمین آب صنعتی و تغذیه دیگ‌های بخار",
-    order: 8,
-    isActive: true,
-  },
-  {
-    title: "خدمات ماشین‌کاری سنگین",
-    slug: "machining",
-    description: "خدمات تخصصی تراشکاری، فرزکاری دروازه‌ای، سنگ‌زنی و ساخت قطعات صنعتی سنگین",
-    order: 9,
-    isActive: true,
-  },
-];
-
 /* ── Industrial Products Seed Data ── */
-const PRODUCTS_DATA = [
+export const PRODUCTS_TO_SEED = [
   {
     title: "دیزل ژنراتور صنعتی ۴۵ کاوا (45 KVA Diesel Generator)",
     slug: "diesel-generator-45kva",
-    categorySlug: "generators",
-    order: 1,
+    category: "generators",
+    order: 0,
     shortDescription:
       "دیزل ژنراتور صنعتی ۴۵ کاوا (۳۶ کیلووات) مجهز به موتور دیزل چهارسیلندر آب‌خنک، آلترناتور سنکرون براشلس، کنترل‌کننده دیجیتال هوشمند و کانوپی سایلنت با عایق صوتی چندلایه.",
     fullDescriptionParagraphs: [
@@ -136,8 +69,8 @@ const PRODUCTS_DATA = [
   {
     title: "پکیج دیزل پمپ پرتابل ۴ اینچ مدل HKDA.DGP.4D.001",
     slug: "portable-diesel-gear-pump-hkda-4d001",
-    categorySlug: "gear",
-    order: 2,
+    category: "gear",
+    order: 1,
     shortDescription:
       "پکیج پرتابل و مستقل از برق پمپ دنده‌ای صنعتی جابه‌جایی مثبت ۴ اینچ با کاور سایلنت، موتور دیزل و دبی ۴۲ مترمکعب در ساعت؛ طراحی‌شده برای انتقال فرآورده‌های نفتی، روغن‌های سنگین، سوخت، لجن هیدروکربنی و سیالات غلیظ در شرایط اضطراری.",
     fullDescriptionParagraphs: [
@@ -172,8 +105,8 @@ const PRODUCTS_DATA = [
   {
     title: "پمپ خودمکش دیزلی تمام‌اتوماتیک ۴ اینچ مدل SP-4D-01",
     slug: "self-priming-diesel-pump-4inch",
-    categorySlug: "centrifugal",
-    order: 3,
+    category: "centrifugal",
+    order: 2,
     shortDescription:
       "پمپ خودمکش دیزلی پرتابل ۴ اینچ با دبی ۱۶۰ مترمکعب بر ساعت، عمق مکش ۹ متر، سامانه وکیوم کمکی و کنترلر سه‌مرحله‌ای؛ مناسب آبکشی، تخلیه آبگرفتگی‌ها و انتقال فاضلاب و سیالات حاوی لجن، شن و ماسه.",
     fullDescriptionParagraphs: [
@@ -204,8 +137,8 @@ const PRODUCTS_DATA = [
   {
     title: "پمپ خودمکش دیزلی تمام‌اتوماتیک ۶ اینچ مدل SP-6D-01",
     slug: "self-priming-diesel-pump-6inch",
-    categorySlug: "centrifugal",
-    order: 4,
+    category: "centrifugal",
+    order: 3,
     shortDescription:
       "پکیج خودمکش دیزلی ۶ اینچ با دبی ۳۲۰ مترمکعب بر ساعت، هد ۳۲ متر، سامانه وکیوم مایع‌رینگ ۱۰۰ CFM، موتور دیزل چهارسیلندر ۳۸ کیلووات و شاسی یدک‌کش؛ ایده‌آل برای آبگیری گودها، کانال‌ها و انتقال لجن در پروژه‌های عمرانی و پالایشگاهی.",
     fullDescriptionParagraphs: [
@@ -238,8 +171,8 @@ const PRODUCTS_DATA = [
   {
     title: "پمپ خودمکش دیزلی تمام‌اتوماتیک ۸ اینچ مدل SP-8D-01",
     slug: "self-priming-diesel-pump-8inch",
-    categorySlug: "centrifugal",
-    order: 5,
+    category: "centrifugal",
+    order: 4,
     shortDescription:
       "قدرتمندترین پمپ خودمکش دیزلی مجموعه با دبی ۶۰۰ مترمکعب در ساعت، موتور دیزل ۷۰ کیلووات ساخت موتورسازان تبریز، عبور جامدات تا ۱۰۰ میلی‌متر و شاسی فولادی تک‌محور با ترمز دستی؛ طراحی‌شده برای تخلیه حوضچه‌های آلوده و مهار سیلاب‌های بزرگ.",
     fullDescriptionParagraphs: [
@@ -272,8 +205,8 @@ const PRODUCTS_DATA = [
   {
     title: "دستگاه وت‌بلاست و آماده‌سازی سطح پرتابل",
     slug: "portable-wet-blast-unit",
-    categorySlug: "other",
-    order: 6,
+    category: "other",
+    order: 5,
     shortDescription:
       "سامانه سندبلاست مرطوب (وت‌بلاست) پرتابل جهت رسوب‌زدایی، زنگ‌زدایی و آماده‌سازی سطح بدون ایجاد گرد و غبار برای صنایع نفت، گاز، پتروشیمی و سازه‌های دریایی.",
     fullDescriptionParagraphs: [
@@ -296,68 +229,17 @@ const PRODUCTS_DATA = [
 ];
 
 /* ── Seed Runner ── */
-async function seed() {
-  console.log("=== شروع فرآیند درج و همگام‌سازی دسته‌بندی‌ها و محصولات Payload CMS ===");
+export async function seedProductsSafe() {
+  console.log("=== شروع بررسی و درج محصولات در Payload CMS ===");
   const { getPayload } = await import("payload");
   const configModule = await import("./payload.config");
   const config = configModule.default;
 
   const payload = await getPayload({ config });
 
-  // 1. درج / بروزرسانی دسته‌بندی‌های محصولات (ProductCategories)
-  console.log("\n[۱/۲] درج و بروزرسانی دسته‌بندی‌ها در مجموعه product-categories...");
-  const categoryMap: Record<string, string> = {};
+  const results: string[] = [];
 
-  for (const cat of CATEGORIES_DATA) {
-    try {
-      const existing = await payload.find({
-        collection: "product-categories",
-        where: {
-          slug: {
-            equals: cat.slug,
-          },
-        },
-        limit: 1,
-      });
-
-      let catId: string;
-      if (existing.docs.length > 0) {
-        catId = existing.docs[0].id;
-        console.log(`- بروزرسانی دسته‌بندی: ${cat.title} (${cat.slug}) -> ID: ${catId}`);
-        await payload.update({
-          collection: "product-categories",
-          id: catId,
-          data: {
-            title: cat.title,
-            slug: cat.slug,
-            description: cat.description,
-            order: cat.order,
-            isActive: cat.isActive,
-          },
-        });
-      } else {
-        const created = await payload.create({
-          collection: "product-categories",
-          data: {
-            title: cat.title,
-            slug: cat.slug,
-            description: cat.description,
-            order: cat.order,
-            isActive: cat.isActive,
-          },
-        });
-        catId = created.id;
-        console.log(`+ ایجاد دسته‌بندی جدید: ${cat.title} (${cat.slug}) -> ID: ${catId}`);
-      }
-      categoryMap[cat.slug] = catId;
-    } catch (err) {
-      console.error(`خطا در ایجاد/بروزرسانی دسته‌بندی ${cat.slug}:`, err);
-    }
-  }
-
-  // 2. درج / بروزرسانی محصولات (Products)
-  console.log("\n[۲/۲] درج و بروزرسانی محصولات در مجموعه products...");
-  for (const prod of PRODUCTS_DATA) {
+  for (const prod of PRODUCTS_TO_SEED) {
     try {
       const existing = await payload.find({
         collection: "products",
@@ -367,49 +249,47 @@ async function seed() {
           },
         },
         limit: 1,
+        depth: 0,
       });
 
-      const catId = categoryMap[prod.categorySlug];
-      const productPayload: any = {
-        title: prod.title,
-        slug: prod.slug,
-        category: catId || undefined,
-        shortDescription: prod.shortDescription,
-        fullDescription: buildLexicalContent(prod.fullDescriptionParagraphs),
-        metaTitle: prod.metaTitle,
-        metaDescription: prod.metaDescription,
-        isFeatured: prod.isFeatured,
-        isActive: prod.isActive,
-        order: prod.order,
-        specifications: prod.specifications,
-      };
-
       if (existing.docs.length > 0) {
-        const targetId = existing.docs[0].id;
-        console.log(`- بروزرسانی محصول: ${prod.title} (slug: ${prod.slug}) -> ID: ${targetId}`);
-        await payload.update({
-          collection: "products",
-          id: targetId,
-          data: productPayload,
-        });
+        console.log(`[موجود] محصول «${prod.title}» از قبل در دیتابیس وجود دارد و تصاویر آن حفظ شد.`);
+        results.push(`موجود: ${prod.title}`);
       } else {
-        console.log(`+ ایجاد محصول جدید: ${prod.title} (slug: ${prod.slug})`);
+        console.log(`[جدید] در حال افزودن محصول جدید: «${prod.title}»`);
         await payload.create({
           collection: "products",
-          data: productPayload,
+          data: {
+            title: prod.title,
+            slug: prod.slug,
+            category: prod.category,
+            shortDescription: prod.shortDescription,
+            fullDescription: buildLexicalContent(prod.fullDescriptionParagraphs),
+            metaTitle: prod.metaTitle,
+            metaDescription: prod.metaDescription,
+            isFeatured: prod.isFeatured,
+            isActive: prod.isActive,
+            order: prod.order,
+            specifications: prod.specifications,
+          } as any,
         });
+        results.push(`افزوده شد: ${prod.title}`);
       }
-    } catch (err) {
-      console.error(`خطا در ایجاد/بروزرسانی محصول ${prod.slug}:`, err);
+    } catch (err: any) {
+      console.error(`خطا در ثبت محصول ${prod.slug}:`, err?.message || err);
+      results.push(`خطا (${prod.slug}): ${err?.message}`);
     }
   }
 
-  console.log("\n=== عملیات درج محصولات با موفقیت به پایان رسید! ===");
-  console.log("اکنون کلیه ۶ محصول به همراه دسته‌بندی‌ها و توضیحات کامل در پنل ادمین پیلود در دسترس هستند.");
-  process.exit(0);
+  console.log("=== پایان عملیات درج محصولات ===");
+  return results;
 }
 
-seed().catch((err) => {
-  console.error("خطای کلی در فرآیند Seeding:", err);
-  process.exit(1);
-});
+if (process.argv[1] && process.argv[1].endsWith("seed.ts")) {
+  seedProductsSafe()
+    .then(() => process.exit(0))
+    .catch((err) => {
+      console.error("خطای اسکریپت seed:", err);
+      process.exit(1);
+    });
+}
