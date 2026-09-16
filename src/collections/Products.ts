@@ -9,6 +9,12 @@ export const Products: CollectionConfig = {
   access: {
     read: () => true,
   },
+  admin: {
+    useAsTitle: "title",
+    defaultColumns: ["title", "slug", "category", "isActive", "isFeatured", "order"],
+    group: "محصولات و پروژه‌ها",
+    description: "مدیریت کاتالوگ محصولات صنعتی، دیزل ژنراتورها، پمپ‌ها و تجهیزات",
+  },
   fields: [
     /* ── بخش اطلاعات اصلی ── */
     {
