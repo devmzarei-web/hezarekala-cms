@@ -18,6 +18,7 @@ import { Projects } from './collections/Projects'
 import { Gallery } from './collections/Gallery'
 import { Team } from './collections/Team'
 import { HomeSections } from './collections/HomeSections'
+import { migrateProductCategories } from './migrate-categories'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -48,6 +49,9 @@ const cmsUrl = cleanUrl(
 )
 
 export default buildConfig({
+  onInit: async (payload) => {
+    await migrateProductCategories(payload)
+  },
   serverURL: cmsUrl,
 
   admin: {

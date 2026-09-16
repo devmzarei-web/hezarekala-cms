@@ -228,6 +228,8 @@ export const PRODUCTS_TO_SEED = [
   },
 ];
 
+import { migrateProductCategories } from "./migrate-categories";
+
 /* ── Seed Runner ── */
 export async function seedProductsSafe() {
   console.log("=== شروع بررسی و درج محصولات در Payload CMS ===");
@@ -236,6 +238,9 @@ export async function seedProductsSafe() {
   const config = configModule.default;
 
   const payload = await getPayload({ config });
+
+  // ۱. ابتدا مهاجرت و همگام‌سازی دسته‌بندی‌ها را اجرا می‌کنیم
+  await migrateProductCategories(payload);
 
   const results: string[] = [];
 
@@ -257,12 +262,25 @@ export async function seedProductsSafe() {
         results.push(`موجود: ${prod.title}`);
       } else {
         console.log(`[جدید] در حال افزودن محصول جدید: «${prod.title}»`);
+
+        // یافتن شناسه دیتابیس (ObjectId) دسته‌بندی مربوطه
+        let categoryId: string | undefined = undefined;
+        if (prod.category) {
+          const catDoc = await payload.find({
+            collection: "product-categories",
+            where: { slug: { equals: prod.category } },
+            limit: 1,
+            depth: 0,
+          });
+          categoryId = catDoc.docs[0]?.id;
+        }
+
         await payload.create({
           collection: "products",
           data: {
             title: prod.title,
             slug: prod.slug,
-            category: prod.category,
+            category: categoryId,
             shortDescription: prod.shortDescription,
             fullDescription: buildLexicalContent(prod.fullDescriptionParagraphs),
             metaTitle: prod.metaTitle,

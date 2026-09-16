@@ -35,22 +35,12 @@ export const Products: CollectionConfig = {
     },
     {
       name: "category",
-      type: "select",
+      type: "relationship",
+      relationTo: "product-categories",
+      hasMany: false,
       label: "دسته‌بندی",
-      defaultValue: "centrifugal",
-      options: [
-        { label: "دیزل ژنراتور و موتور دیزلی", value: "generators" },
-        { label: "پمپ سانتریفیوژ و خودمکش", value: "centrifugal" },
-        { label: "پمپ دنده‌ای و غلیظ‌کش", value: "gear" },
-        { label: "پمپ لجن‌کش و خودمکش", value: "sludge-pumps" },
-        { label: "پمپ دنده‌ای پرتابل", value: "gear-pumps" },
-        { label: "پمپ پیستونی", value: "piston" },
-        { label: "پمپ طبقاتی", value: "multistage" },
-        { label: "وت‌بلاست و آماده‌سازی سطح", value: "other" },
-        { label: "خدمات ماشین‌کاری سنگین", value: "machining" },
-      ],
       admin: {
-        description: "دسته‌بندی محصول را انتخاب کنید.",
+        description: "دسته‌بندی اصلی محصول را انتخاب کنید.",
       },
     },
 
