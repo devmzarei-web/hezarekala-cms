@@ -48,6 +48,81 @@ export const Settings: CollectionConfig = {
       label: "لوگو برای پس‌زمینه تیره",
     },
     {
+      name: "headerNavItems",
+      type: "array",
+      label: "منوی اصلی هدر (Header Navigation)",
+      fields: [
+        {
+          name: "label",
+          type: "text",
+          required: true,
+          label: "عنوان لینک",
+        },
+        {
+          name: "href",
+          type: "text",
+          required: true,
+          label: "آدرس لینک (مثلاً: /products)",
+        },
+        {
+          name: "isExternal",
+          type: "checkbox",
+          label: "باز شدن در تب جدید (لینک خارجی)",
+          defaultValue: false,
+        },
+      ],
+    },
+    {
+      name: "headerCtaText",
+      type: "text",
+      label: "متن دکمه اصلی هدر (CTA)",
+      defaultValue: "درخواست مشاوره",
+    },
+    {
+      name: "headerCtaLink",
+      type: "text",
+      label: "لینک دکمه اصلی هدر (CTA)",
+      defaultValue: "/contact",
+    },
+    {
+      name: "footerQuickLinks",
+      type: "array",
+      label: "لینک‌های دسترسی سریع فوتر (Quick Links)",
+      fields: [
+        {
+          name: "label",
+          type: "text",
+          required: true,
+          label: "عنوان لینک",
+        },
+        {
+          name: "href",
+          type: "text",
+          required: true,
+          label: "آدرس لینک",
+        },
+      ],
+    },
+    {
+      name: "footerProductLinks",
+      type: "array",
+      label: "لینک‌های محصولات فوتر (Product Links)",
+      fields: [
+        {
+          name: "label",
+          type: "text",
+          required: true,
+          label: "عنوان لینک",
+        },
+        {
+          name: "href",
+          type: "text",
+          required: true,
+          label: "آدرس لینک",
+        },
+      ],
+    },
+    {
       name: "certificates",
       type: "array",
       label: "لوگوهای اعتماد (اینماد، ساماندهی و ...)",
