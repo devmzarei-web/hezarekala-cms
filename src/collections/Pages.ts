@@ -48,6 +48,86 @@ export const Pages: CollectionConfig = {
       },
     },
     {
+      name: 'heroVideoContent',
+      type: 'group',
+      label: 'متن و محتوای روی ویدیوی اصلی Hero',
+      admin: {
+        description: 'متن‌ها، تیتر سه سطری و دکمه‌های نمایش داده شده روی ویدیو',
+        condition: (data: Record<string, unknown>) => Boolean(data?.heroVideo),
+      },
+      fields: [
+        {
+          name: 'badge',
+          type: 'text',
+          label: 'متن برچسب بالای تیتر (Pill Badge)',
+          admin: {
+            placeholder: 'مثلاً: بیش از ۷ سال تجربه در صنعت پمپ‌سازی',
+          },
+        },
+        {
+          name: 'titleLine1',
+          type: 'text',
+          label: 'سطر اول تیتر (سفید)',
+          admin: {
+            placeholder: 'مثلاً: طراحی و ساخت',
+          },
+        },
+        {
+          name: 'titleHighlight',
+          type: 'text',
+          label: 'سطر دوم تیتر / واژه شاخص (طلایی)',
+          admin: {
+            placeholder: 'مثلاً: پمپ‌های صنعتی بزرگ',
+          },
+        },
+        {
+          name: 'titleLine3',
+          type: 'text',
+          label: 'سطر سوم تیتر (سفید)',
+          admin: {
+            placeholder: 'مثلاً: برای حیاتی‌ترین صنایع ایران',
+          },
+        },
+        {
+          name: 'description',
+          type: 'textarea',
+          label: 'متن توضیحات زیر تیتر',
+        },
+        {
+          name: 'primaryCtaText',
+          type: 'text',
+          label: 'متن دکمه اول (طلایی)',
+          admin: {
+            placeholder: 'مشاهده محصولات',
+          },
+        },
+        {
+          name: 'primaryCtaLink',
+          type: 'text',
+          label: 'لینک دکمه اول',
+          admin: {
+            placeholder: '/products',
+          },
+        },
+        {
+          name: 'secondaryCtaText',
+          type: 'text',
+          label: 'متن دکمه دوم (شفاف با حاشیه)',
+          admin: {
+            placeholder: 'درخواست مشاوره',
+          },
+        },
+        {
+          name: 'secondaryCtaLink',
+          type: 'text',
+          label: 'لینک دکمه دوم',
+          admin: {
+            placeholder: '/contact',
+          },
+        },
+      ],
+    },
+    {
       name: 'heroSlides',
       type: 'array',
       label: 'اسلایدهای Hero (در صورت نداشتن ویدیو)',
@@ -72,7 +152,76 @@ export const Pages: CollectionConfig = {
         {
           name: 'title',
           type: 'text',
-          label: 'عنوان اسلاید',
+          label: 'عنوان اسلاید (داخلی)',
+        },
+        {
+          name: 'badge',
+          type: 'text',
+          label: 'متن برچسب بالای تیتر (Pill Badge)',
+          admin: {
+            placeholder: 'مثلاً: بیش از ۷ سال تجربه در صنعت پمپ‌سازی',
+          },
+        },
+        {
+          name: 'titleLine1',
+          type: 'text',
+          label: 'سطر اول تیتر (سفید)',
+          admin: {
+            placeholder: 'مثلاً: طراحی و ساخت',
+          },
+        },
+        {
+          name: 'titleHighlight',
+          type: 'text',
+          label: 'سطر دوم تیتر / واژه شاخص (طلایی)',
+          admin: {
+            placeholder: 'مثلاً: پمپ‌های صنعتی بزرگ',
+          },
+        },
+        {
+          name: 'titleLine3',
+          type: 'text',
+          label: 'سطر سوم تیتر (سفید)',
+          admin: {
+            placeholder: 'مثلاً: برای حیاتی‌ترین صنایع ایران',
+          },
+        },
+        {
+          name: 'description',
+          type: 'textarea',
+          label: 'متن توضیحات زیر تیتر اسلاید',
+        },
+        {
+          name: 'primaryCtaText',
+          type: 'text',
+          label: 'متن دکمه اول (طلایی)',
+          admin: {
+            placeholder: 'مشاهده محصولات',
+          },
+        },
+        {
+          name: 'primaryCtaLink',
+          type: 'text',
+          label: 'لینک دکمه اول',
+          admin: {
+            placeholder: '/products',
+          },
+        },
+        {
+          name: 'secondaryCtaText',
+          type: 'text',
+          label: 'متن دکمه دوم (شفاف با حاشیه)',
+          admin: {
+            placeholder: 'درخواست مشاوره',
+          },
+        },
+        {
+          name: 'secondaryCtaLink',
+          type: 'text',
+          label: 'لینک دکمه دوم',
+          admin: {
+            placeholder: '/contact',
+          },
         },
       ],
     },
