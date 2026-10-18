@@ -18,6 +18,7 @@ import { Projects } from './collections/Projects'
 import { Gallery } from './collections/Gallery'
 import { Team } from './collections/Team'
 import { HomeSections } from './collections/HomeSections'
+import { Certificates } from './collections/Certificates'
 import { migrateProductCategories } from './migrate-categories'
 
 const filename = fileURLToPath(import.meta.url)
@@ -74,6 +75,7 @@ export default buildConfig({
     Gallery,
     Team,
     HomeSections,
+    Certificates,
   ],
 
   editor: lexicalEditor(),
