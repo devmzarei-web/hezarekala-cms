@@ -35,7 +35,7 @@ export const Certificates: CollectionConfig = {
       name: 'issuingAuthority',
       type: 'text',
       label: 'مرجع صادرکننده / ممیزی',
-      defaultValue: 'QAL UK / Quality Assessment Lia',
+      defaultValue: 'Quay Audit Limited (QAL)',
     },
     {
       name: 'registrationNumber',

@@ -28,7 +28,7 @@ const CERTIFICATES_DATA: SeedCertDef[] = [
     title: 'سیستم مدیریت ایمنی و بهداشت شغلی',
     subtitle: 'Occupational Health & Safety Management Systems',
     registrationNumber: 'QAL-258298-25-12721661',
-    issuingAuthority: 'QAL UK / Quality Assessment Lia',
+    issuingAuthority: 'Quay Audit Limited (QAL)',
     issueDate: '2024 - 2027',
     description:
       'گواهینامه بین‌المللی استقرار سیستم مدیریت بهداشت حرفه‌ای و ایمنی کارگاهی بر اساس استانداردهای سخت‌گیرانه صنایع سنگین، به حداقل رساندن خطرات و حوادث شغلی و ارتقای فرهنگ حفاظت فردی و محیطی در فرآیندهای مهندسی و ساخت تجهیزات دوار.',
@@ -44,7 +44,7 @@ const CERTIFICATES_DATA: SeedCertDef[] = [
     title: 'سیستم مدیریت یکپارچه',
     subtitle: 'Integrated Management System (ISO 9001, ISO 14001, ISO 45001)',
     registrationNumber: 'QAL-258298-25-12721663',
-    issuingAuthority: 'QAL UK / Quality Assessment Lia',
+    issuingAuthority: 'Quay Audit Limited (QAL)',
     issueDate: '2024 - 2027',
     description:
       'پیاده‌سازی یکپارچه و سیستماتیک ساختار مدیریت کیفیت، بهداشت حرفه‌ای و حفاظت محیط زیست، تضمین‌کننده همگرایی فرآیندهای زنجیره تأمین، تولید مهندسی، کنترل کیفیت و خدمات پس از فروش منطبق با موازین جامع بین‌المللی.',
@@ -60,7 +60,7 @@ const CERTIFICATES_DATA: SeedCertDef[] = [
     title: 'سیستم مدیریت کیفیت در صنایع نفت، پتروشیمی و گاز طبیعی',
     subtitle: 'Quality Management Systems for Petroleum, Petrochemical and Natural Gas Industries',
     registrationNumber: 'QAL-258298-25-12721662',
-    issuingAuthority: 'QAL UK / Quality Assessment Lia',
+    issuingAuthority: 'Quay Audit Limited (QAL)',
     issueDate: '2024 - 2027',
     description:
       'استاندارد اختصاصی کیفیت در زنجیره تأمین صنایع نفت، گاز و پتروشیمی. تضمین صلاحیت عالی و تضمین کیفیت در طراحی، مهندسی معکوس، ساخت، تست عملکرد هیدرولیک و راه‌اندازی پمپ‌ها و تجهیزات فرآیندی بحرانی.',
@@ -76,7 +76,7 @@ const CERTIFICATES_DATA: SeedCertDef[] = [
     title: 'سیستم مدیریت کیفیت بین‌المللی',
     subtitle: 'Quality Management Systems',
     registrationNumber: 'QAL-283017-19-15461',
-    issuingAuthority: 'QAL UK / Quality Assessment Lia',
+    issuingAuthority: 'Quay Audit Limited (QAL)',
     issueDate: '2019 - Renewed',
     description:
       'چارچوب استانداردهای بین‌المللی مدیریت کیفیت سازمانی، متمرکز بر رضایت‌مندی کارفرمایان، ارزیابی مستمر شاخص‌های مهندسی، انطباق تلورانس‌های ماشین‌کاری سنگین و استقرار روش‌های کنترل کیفی دقیق در تمامی مراحل تولید.',
@@ -92,7 +92,7 @@ const CERTIFICATES_DATA: SeedCertDef[] = [
     title: 'سیستم مدیریت بهداشت، ایمنی و محیط زیست',
     subtitle: 'Health, Safety and Environmental Management System',
     registrationNumber: 'QAL-283016-19-15456',
-    issuingAuthority: 'QAL UK / Quality Assessment Lia',
+    issuingAuthority: 'Quay Audit Limited (QAL)',
     issueDate: '2019 - Renewed',
     description:
       'مدل مدیریت جامع ریسک‌های بهداشت، ایمنی صنعتی و موازین زیست‌محیطی در کلیه سایت‌های عملیاتی، خطوط ماشین‌کاری و کارگاه‌های تست، تضمین‌کننده تولید پایدار و سازگار با استانداردهای کارخانه‌ای مدرن.',
@@ -210,14 +210,21 @@ export async function seedCertificates() {
     }
 
     if (existingCert.docs.length > 0) {
-      const docId = existingCert.docs[0].id
+      const existing = existingCert.docs[0]
+      // Preserve user-assigned image or custom edits from admin panel
+      const updateData: Record<string, any> = {
+        issuingAuthority: certData.issuingAuthority,
+      }
+      if (!existing.image) {
+        updateData.image = mediaDocId
+      }
       await payload.update({
         collection: 'certificates',
-        id: docId,
-        data: certPayloadData,
+        id: existing.id,
+        data: updateData,
       })
       updatedCount++
-      console.log(`✓ رکورد گواهینامه موجود به‌روزرسانی شد (ID: ${docId})`)
+      console.log(`✓ رکورد گواهینامه موجود بررسی شد (ID: ${existing.id}). تصویر سفارشی کاربر حفظ گردید.`)
     } else {
       const newCert = await payload.create({
         collection: 'certificates',

@@ -31,14 +31,8 @@ export const Media: CollectionConfig = {
     formatOptions: {
       format: "webp",
       options: {
-        quality: 80,
+        quality: 85,
       },
-    },
-    resizeOptions: {
-      width: 1920,
-      height: 1080,
-      position: "centre",
-      withoutEnlargement: true,
     },
   },
   fields: [
