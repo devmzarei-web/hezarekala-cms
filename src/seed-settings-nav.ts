@@ -62,6 +62,17 @@ export async function seedSettingsNav() {
           headerCtaLink: "/contact",
           footerQuickLinks: DEFAULT_FOOTER_QUICK_LINKS,
           footerProductLinks: DEFAULT_FOOTER_PRODUCT_LINKS,
+          phone: "061-53229528",
+          telefax: "061-53229528",
+          phone2: "061-53240127",
+          phone3: "061-53240137",
+          email: "info@hezarehkala.com",
+          salesEmail: "sales@hezarehkala.com",
+          supportEmail: "support@hezarehkala.com",
+          address: "آبادان، کیلومتر ۵ جاده آبادان به اهواز، شهرک صنعتی شماره یک، خیابان اروند ۱، شرکت هزاره کالا دانش اروند",
+          postalCode: "۶۳۱۵۷۷۴۹۸۷",
+          ceoName: "سید محمود دانش پور",
+          ceoMobile: "09166317609",
         } as any,
       });
       console.log("✓ رکورد جدید تنظیمات با موفقیت ایجاد شد.");
@@ -104,6 +115,33 @@ export async function seedSettingsNav() {
         needsUpdate = true;
       } else {
         console.log(`[موجود] لینک‌های محصولات فوتر از قبل دارای ${doc.footerProductLinks.length} آیتم است.`);
+      }
+
+      // 5. بررسی و به‌روزرسانی اطلاعات تماس رسمی شرکت
+      if (!doc.phone || doc.phone.includes("0917") || !doc.telefax) {
+        console.log("[به‌روزرسانی] ثبت خطوط تلفن و تلفکس رسمی کارخانه...");
+        updateData.phone = "061-53229528";
+        updateData.telefax = "061-53229528";
+        updateData.phone2 = "061-53240127";
+        updateData.phone3 = "061-53240137";
+        needsUpdate = true;
+      }
+
+      if (!doc.email || doc.email.includes("gmail") || !doc.salesEmail) {
+        console.log("[به‌روزرسانی] ثبت ۳ ایمیل سازمانی رسمی شرکت (info, sales, support)...");
+        updateData.email = "info@hezarehkala.com";
+        updateData.salesEmail = "sales@hezarehkala.com";
+        updateData.supportEmail = "support@hezarehkala.com";
+        needsUpdate = true;
+      }
+
+      if (!doc.address || doc.address.includes("فرعی ۶") || !doc.postalCode) {
+        console.log("[به‌روزرسانی] ثبت آدرس جدید کارخانه، کد پستی و مشخصات مدیریت عامل...");
+        updateData.address = "آبادان، کیلومتر ۵ جاده آبادان به اهواز، شهرک صنعتی شماره یک، خیابان اروند ۱، شرکت هزاره کالا دانش اروند";
+        updateData.postalCode = "۶۳۱۵۷۷۴۹۸۷";
+        updateData.ceoName = "سید محمود دانش پور";
+        updateData.ceoMobile = "09166317609";
+        needsUpdate = true;
       }
 
       if (needsUpdate) {
